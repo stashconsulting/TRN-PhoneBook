@@ -19,14 +19,21 @@ class PhoneRecords(Resource):
         data.append(request_body)
         return request_body
 
-    def delete(self): ...
 
 class PhoneRecord(Resource):
     def get(self): ...
 
     def put(self): ...
 
+    def delete(self, element_id):
+        for index, record in enumerate(data):
+            if element_id == record['id']:
+                del data[index]
+                break
+
+
 api.add_resource(PhoneRecords, '/phonerecords')
+api.add_resource(PhoneRecord, '/phonerecord/<int:element_id>')
 
 if __name__ == '__main__':
     app.run(debug=True)

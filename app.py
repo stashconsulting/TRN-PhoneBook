@@ -21,7 +21,10 @@ class PhoneRecords(Resource):
 
 
 class PhoneRecord(Resource):
-    def get(self): ...
+    def get(self, element_id):
+        for record in data:
+            if element_id == record['id']:
+                return data
 
     def put(self): ...
 

@@ -9,6 +9,17 @@ data = [
     {"id": 890, "name": "javier", "lastname": "ortiz", "number": 8093013934, "company": "stash"},
 ]
 
+def delete_record_by_id(element_id):
+    for index, record in enumerate(data):
+            if element_id == record['id']:
+                del data[index]
+                break
+
+
+def create_new_record(element_data):
+    data.append(element_data)
+    return element_data
+
 class PhoneRecords(Resource):
 
     def get(self):
@@ -16,8 +27,7 @@ class PhoneRecords(Resource):
 
     def post(self):
         request_body = request.get_json()
-        data.append(request_body)
-        return request_body
+        return create_new_record(request_body)
 
 
 class PhoneRecord(Resource):
@@ -26,13 +36,14 @@ class PhoneRecord(Resource):
             if element_id == record['id']:
                 return data
 
-    def put(self): ...
+    def put(self, element_id):
+        delete_record_by_id(element_id)
+        request_body = request.get_json()
+        return create_new_record(request_body)
+
 
     def delete(self, element_id):
-        for index, record in enumerate(data):
-            if element_id == record['id']:
-                del data[index]
-                break
+        delete_record_by_id(element_id)
 
 
 api.add_resource(PhoneRecords, '/phonerecords')

@@ -17,6 +17,9 @@ data = {
 
 phone_records_post_parser = reqparse.RequestParser()
 phone_records_post_parser.add_argument('name', type=str, required=True, help="Name cannot be blank!")
+phone_records_post_parser.add_argument('last_name', type=str, required=True, help="Last name cannot be blank!")
+phone_records_post_parser.add_argument('phone_number', type=int, required=True, help="Phone number is requierd!")
+phone_records_post_parser.add_argument('company_name', type=str, required=True, help="Please especify Company name !")
 
 
 class PartialPhoneRecord(Resource):
@@ -39,12 +42,19 @@ def delete_record_by_id(element_id):
             break
     return {'deleted': 'ok'}
 
-def create_new_record(unparsed_data):
-    # args = phone_records_post_parser.parse_args()
-    # return args
+def create_new_record(args):
+    args = phone_records_post_parser.parse_args()
+
+    for dict_id in data:
+        duplicated_information = data[dict_id]
+        if (args['phone_number'] == duplicated_information['phone_number']):
+            return {
+                'error': f'duplicated number. it already exist under {duplicated_information["full_name"]}'
+                }
+
     new_record_id = str(uuid.uuid1())
-    unparsed_data['full_name'] = f"{unparsed_data['name']} {unparsed_data['last_name']}"
-    data[new_record_id] = unparsed_data
+    args['full_name'] = f"{args['name']} {args['last_name']}"
+    data[new_record_id] = args
     return data[new_record_id]
 
 class PhoneRecords(Resource):

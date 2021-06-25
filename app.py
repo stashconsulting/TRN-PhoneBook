@@ -1,6 +1,6 @@
 import uuid
 from flask import Flask, request
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 
 app = Flask(__name__)
 api = Api(app)
@@ -8,11 +8,16 @@ api = Api(app)
 data = { 
     str(uuid.uuid1()): {
     "name": "Javier",
-    "last_name":"Ortiz",
+    "last_name": "Ortiz",
+    "full_name": "Javier Ortiz",
     "phone_number": 8093013934,
     "company_name": "Stash"
     } 
 }
+
+phone_records_post_parser = reqparse.RequestParser()
+phone_records_post_parser.add_argument('name', type=str, required=True, help="Name cannot be blank!")
+
 
 class PartialPhoneRecord(Resource):
 
@@ -20,13 +25,12 @@ class PartialPhoneRecord(Resource):
         for dict_id in data:
             values = data[dict_id]
             if (
-                search_value in values['name'] 
-                or search_value in values['last_name']
+                search_value in values['full_name']
                 or search_value in values['phone_number']
                 or search_value in values['company_name']
             ):
                 return values
-            
+
 
 def delete_record_by_id(element_id):
     for dict_id in data:
@@ -35,9 +39,12 @@ def delete_record_by_id(element_id):
             break
     return {'deleted': 'ok'}
 
-def create_new_record(element_data):
+def create_new_record(unparsed_data):
+    # args = phone_records_post_parser.parse_args()
+    # return args
     new_record_id = str(uuid.uuid1())
-    data[new_record_id] = element_data
+    unparsed_data['full_name'] = f"{unparsed_data['name']} {unparsed_data['last_name']}"
+    data[new_record_id] = unparsed_data
     return data[new_record_id]
 
 class PhoneRecords(Resource):
@@ -67,7 +74,7 @@ class PhoneRecord(Resource):
 
 api.add_resource(PhoneRecords, '/phonerecords')
 api.add_resource(PhoneRecord, '/phonerecord/<string:element_id>')
-api.add_resource(PartialPhoneRecord, "/PartialPhoneRecord")
+api.add_resource(PartialPhoneRecord, "/partialphonerecord")
 
 if __name__ == '__main__':
     app.run(debug=True)

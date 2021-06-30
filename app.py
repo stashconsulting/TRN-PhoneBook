@@ -6,12 +6,12 @@ app = Flask(__name__)
 api = Api(app)
 
 data = { 
-    str(uuid.uuid1()): {
+    str(uuid.uuid1()): 
     "name": "Javier",
     "last_name": "Ortiz",
     "full_name": "Javier Ortiz",
     "phone_number": 8093013934,
-    "company_name": "Stash"
+    "company_name": "Stash",
     } 
 }
 
@@ -87,4 +87,5 @@ api.add_resource(PhoneRecord, '/phonerecord/<string:element_id>')
 api.add_resource(PartialPhoneRecord, "/partialphonerecord")
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.debug = True
+    app.run(host = "0.0.0.0", port = 8080)

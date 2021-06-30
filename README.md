@@ -15,20 +15,6 @@ _We will be using the Markdown formating for this assigment on how to document o
 ## Getting Started
 
 Following we will detail the procces and what we did on the Rest-Api:
-
-### Requisited
-
-* aniso8601==9.0.1
-* certifi==2021.5.30
-* click==8.0.1
-* Flask==2.0.1
-* Flask-RESTful==0.3.9
-* itsdangerous==2.0.1
-* Jinja2==3.0.1
-* MarkupSafe==2.0.1
-* pytz==2021.1
-* six==1.16.0
-* Werkzeug==2.0.1
  
  ### What we have achieved
  

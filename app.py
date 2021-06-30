@@ -6,13 +6,13 @@ app = Flask(__name__)
 api = Api(app)
 
 data = { 
-    str(uuid.uuid1()): 
+    str(uuid.uuid1()): {
     "name": "Javier",
     "last_name": "Ortiz",
     "full_name": "Javier Ortiz",
     "phone_number": 8093013934,
     "company_name": "Stash",
-    } 
+    }
 }
 
 phone_records_post_parser = reqparse.RequestParser()

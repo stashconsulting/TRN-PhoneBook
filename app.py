@@ -1,9 +1,13 @@
+from hmac import new
 from os import name
-from typing import List
+from tkinter import Variable
+from typing import List, MutableMapping
 
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api, reqparse
 from flask_sqlalchemy import SQLAlchemy
+from flask_script import Manager
+from flask_migrate import Migrate, MigrateCommand
 
 from sqlalchemy import Column, String
 from sqlalchemy.sql.functions import user
@@ -12,19 +16,46 @@ from sqlalchemy.types import Integer, BigInteger
 app = Flask(__name__)
 api = Api(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:Ivanka0818@localhost:3306/test"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:@localhost:3306/test"
 engine = SQLAlchemy(app)
+migrate = Migrate(app,engine)
 
+manager = Manager(app)
+manager.add_command("engine", MigrateCommand)
+
+def clean_variable(variable_to_clean):
+    
+    print(vars(variable_to_clean))  
+    variableid = (vars(variable_to_clean))
+    del variableid['_sa_instance_state']
+    return variableid
+
+def dic_json_serializable(json_serializable_dic):
+        
+        dataphonerecords = []
+    
+        if isinstance(json_serializable_dic, list):
+            
+            for variable_to_clean in json_serializable_dic:
+                dataphonerecords.append(clean_variable(variable_to_clean))
+          
+        else:
+            print(vars(json_serializable_dic))
+            clean_results =(clean_variable(json_serializable_dic))
+            dataphonerecords = clean_results
+
+        return dataphonerecords
 
 class User(engine.Model):
     __tablename__ = "users"
 
-    user_id = Column(Integer(), primary_key =True)
+    user_id = Column(Integer(),autoincrement=True,primary_key=True)
     name = Column(String(50), nullable=False)
     last_name = Column(String(50), nullable=False)
     full_name = Column(String(50), nullable=False)
-    phone_number = Column(BigInteger(),primary_key=True)
+    phone_number = Column(BigInteger(),nullable=True)
     company_name = Column(String(50), nullable=False)
+    company_deparment = Column(String(50), nullable=False)
     
 phone_records_post_parser = reqparse.RequestParser()
 phone_records_post_parser.add_argument('name', type=str, required=True, help="Name cannot be blank!")
@@ -32,7 +63,6 @@ phone_records_post_parser.add_argument('last_name', type=str, required=True, hel
 phone_records_post_parser.add_argument('phone_number', type=int, required=True, help="Phone number is requierd!")
 phone_records_post_parser.add_argument('company_name', type=str, required=True, help="Please especify Company name !")
 
- 
 class PartialPhoneRecord(Resource):
 
     def get(self, search_value):
@@ -43,14 +73,7 @@ class PartialPhoneRecord(Resource):
             datalike = User.query.filter(User.phone_number.like(search)).all()
         if not datalike: 
             datalike = User.query.filter(User.company_name.like(search)).all()
-        dataphonerecords = []
-        
-        for idinformation in datalike:
-            print(vars(idinformation))
-            phoneidinformation = (vars(idinformation))
-            del phoneidinformation['_sa_instance_state']
-            dataphonerecords.append(phoneidinformation)
-        return dataphonerecords
+        return dic_json_serializable(datalike)
 
 
 def delete_record_by_id(element_id):
@@ -74,26 +97,23 @@ def create_new_record():
 
     # TODO: Save records
     engine.session.add(new_phone_record)
-    return engine.session.commit()
+    engine.session.commit()
+    engine.session.refresh(new_phone_record)
+    print(new_phone_record.name)
+    return dic_json_serializable(new_phone_record)
 
 
 class PhoneRecords(Resource):
 
     def get(self):
-
-        dataphonerecords = []
         
         results = engine.session.query(User).all()
-        for idinformation in results:
-            print(vars(idinformation))
-            phoneidinformation = (vars(idinformation))
-            del phoneidinformation['_sa_instance_state']
-            dataphonerecords.append(phoneidinformation)
-        return dataphonerecords
+        return dic_json_serializable(results)
         
 
     def post(self):
         return create_new_record()
+         
 
 class PhoneRecord(Resource):
     
@@ -108,7 +128,7 @@ class PhoneRecord(Resource):
         user.company_name = args['company_name']
         engine.session.commit()
     
-        return
+        return args
 
     def delete(self, element_id):
         return delete_record_by_id(element_id)
@@ -121,4 +141,5 @@ api.add_resource(PartialPhoneRecord, '/partialphonerecord/<string:search_value>'
 if __name__ == '__main__':
     app.debug = True
     app.run(host = "0.0.0.0", port = 8080)
-   
+    manager.run()
+    

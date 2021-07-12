@@ -1,7 +1,7 @@
 from hmac import new
 from os import name
 from tkinter import Variable
-from typing import List, MutableMapping
+from typing import List
 
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api, reqparse
@@ -12,11 +12,17 @@ from flask_migrate import Migrate, MigrateCommand
 from sqlalchemy import Column, String
 from sqlalchemy.sql.functions import user
 from sqlalchemy.types import Integer, BigInteger
+import os 
+
+PASSWORD = os.environ.get("PASSWORD")
+mysqluser = ("root")
+mysqlhost = ("localhost")
+mysqlport = ("3306")
 
 app = Flask(__name__)
 api = Api(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:@localhost:3306/test"
+app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{mysqluser}:{PASSWORD}@{mysqlhost}:{mysqlport}/test"
 engine = SQLAlchemy(app)
 migrate = Migrate(app,engine)
 
@@ -121,7 +127,7 @@ class PhoneRecord(Resource):
         # TODO: Modify by id
         args = phone_records_post_parser.parse_args() # Informacion nueva
         user = User.query.filter(User.user_id==element_id).first()
-        # Registro de la tabla
+     # Registro de la tabla
         user.name = args['name']
         user.last_name = args['last_name']
         user.phone_number = args['phone_number']

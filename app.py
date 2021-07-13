@@ -14,15 +14,14 @@ from sqlalchemy.sql.functions import user
 from sqlalchemy.types import Integer, BigInteger
 import os 
 
-PASSWORD = os.environ.get("PASSWORD")
-mysqluser = ("root")
-mysqlhost = ("localhost")
-mysqlport = ("3306")
+PASSWORD = os.environ.get("mysql_password")
+MYSQLUSER = os.environ.get("mysql_user")
+MYSQLHOST = os.environ.get("mysql_host")
 
 app = Flask(__name__)
 api = Api(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{mysqluser}:{PASSWORD}@{mysqlhost}:{mysqlport}/test"
+app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{MYSQLUSER}:{PASSWORD}@{MYSQLHOST}:3306/test"
 engine = SQLAlchemy(app)
 migrate = Migrate(app,engine)
 

@@ -118,7 +118,6 @@ class PhoneRecords(Resource):
 
     def post(self):
         return create_new_record()
-         
 
 class PhoneRecord(Resource):
     

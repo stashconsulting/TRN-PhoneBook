@@ -14,14 +14,17 @@ from sqlalchemy.sql.functions import user
 from sqlalchemy.types import Integer, BigInteger
 import os 
 
-PASSWORD = os.environ.get("mysql_password")
+
+MYSQLPASSWORD = os.environ.get("mysql_password")
 MYSQLUSER = os.environ.get("mysql_user")
 MYSQLHOST = os.environ.get("mysql_host")
+MYSQLPORT = os.environ.get("mysql_port")
+APIPORT = os.environ.get("api_port")
 
 app = Flask(__name__)
 api = Api(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{MYSQLUSER}:{PASSWORD}@{MYSQLHOST}:3306/test"
+app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{MYSQLUSER}:{MYSQLPASSWORD}@{MYSQLHOST}:{MYSQLPORT}/test"
 engine = SQLAlchemy(app)
 migrate = Migrate(app,engine)
 
@@ -142,8 +145,9 @@ api.add_resource(PhoneRecords, '/phonerecords')
 api.add_resource(PhoneRecord, '/phonerecord/<string:element_id>')
 api.add_resource(PartialPhoneRecord, '/partialphonerecord/<string:search_value>')
 
+
 if __name__ == '__main__':
     app.debug = True
-    app.run(host = "0.0.0.0", port = 8080)
+    app.run(host = "0.0.0.0", port = APIPORT)
     manager.run()
     

@@ -1,0 +1,2 @@
+cd .github && mkdir workflows
+cd  workflows && touch test.yml

@@ -35,7 +35,7 @@ jobs:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
         
-        from flask import Flask
+from flask import Flask
 from flask_restful import Resource, Api, reqparse
 from flask_sqlalchemy import SQLAlchemy
 from flask_script import Manager

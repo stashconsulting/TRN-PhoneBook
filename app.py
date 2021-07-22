@@ -20,8 +20,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
     "mysql+pymysql://"
     f"{MYSQLUSER}:{MYSQLPASSWORD}@{MYSQLHOST}:{MYSQLPORT}/test"
 )
-engine = SQLAlchemy(app)
-migrate = Migrate(app, engine)
+engine = SQLAlchemy(app) 
+migrate = Migrate(app, engine) 
 
 manager = Manager(app)
 manager.add_command("engine", MigrateCommand)

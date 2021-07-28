@@ -108,7 +108,7 @@ def create_new_record():
         company_name=args["company_name"]
     )
 
-    # TODO: Save records
+
     engine.session.add(new_phone_record)
     engine.session.commit()
     engine.session.refresh(new_phone_record)

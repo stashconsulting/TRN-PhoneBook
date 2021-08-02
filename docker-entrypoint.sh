@@ -4,4 +4,3 @@ python migration.py engine migrate
 python migration.py engine upgrade
 
 python app.py
-

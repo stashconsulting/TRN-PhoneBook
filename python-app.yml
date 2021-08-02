@@ -22,9 +22,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Lint with flake8
 
-    steps create docker image:  
     - name: Check out the repo
       uses: actions/checkout@v2
     

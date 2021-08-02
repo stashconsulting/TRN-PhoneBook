@@ -107,8 +107,6 @@ def create_new_record():
         phone_number=args["phone_number"],
         company_name=args["company_name"]
     )
-
-
     engine.session.add(new_phone_record)
     engine.session.commit()
     engine.session.refresh(new_phone_record)

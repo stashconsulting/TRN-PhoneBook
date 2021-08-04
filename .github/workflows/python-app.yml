@@ -63,4 +63,4 @@ jobs:
       entrypoint: gcloud
       args: ['run', 'deploy', 'SERVICE_ACCOUNT', '--image', 'gcr.io/zerosub/docker-hub-test-app:main', '--region', 'us-central1', '--platform', 'managed']
       images: 
-        gcr.io/zerosub/mellanieacevedo/docker-hub-test-app:main
+         gcr.io/zerosub/mellanieacevedo/docker-hub-test-app:main

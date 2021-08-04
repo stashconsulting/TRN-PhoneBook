@@ -12,6 +12,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
@@ -45,10 +46,10 @@ jobs:
       with:
         version: 'latest'
         service_account_email: mellanieacevedo@zerosub.iam.gserviceaccount.com
-        service_account_key: mellanieacevedo@zerosub.iam.gserviceaccount.com
+        service_account_key: ${{ secrets.SERVICE_ACCOUNT }}
         export_default_credentials: true
 
-    - name: service account
+    - name: Service Account
       run: |
         echo -n ${{ secrets.SERVICE_ACCOUNT }} > credentials.json
         gcloud auth activate-service-account --key-file credentials.json

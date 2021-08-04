@@ -40,6 +40,13 @@ jobs:
       with:
         images: gcr.io/zerosub/docker-hub-test-app
 
+    - name: service account
+      run: |
+         echo -n SERVICE_ACCOUNT > credentials.json
+         gcloud auth SERVICE_ACCOUNT --key-file credentials.json
+         gcloud auth configure-docker -q
+         docker push "gcr.io/zerosub/docker-hub-test-app:main"
+       
     - name: Build and push Docker image
       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
       with:
@@ -51,13 +58,6 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
-
-    - name: service account
-      run: |
-         echo -n SERVICE_ACCOUNT > credentials.json
-         gcloud auth SERVICE_ACCOUNT --key-file credentials.json
-         gcloud auth configure-docker -q
-         docker push "gcr.io/zerosub/docker-hub-test-app:main"
 
     # - name: Deploy with Docker 
     #   entrypoint: gcloud

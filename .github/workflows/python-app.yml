@@ -59,8 +59,7 @@ jobs:
          gcloud auth configure-docker -q
          docker push "gcr.io/zerosub/docker-hub-test-app:main"
 
-    - name: Deploy with Docker 
-      entrypoint: gcloud
-      args: ['run', 'deploy', 'SERVICE_ACCOUNT', '--image', 'gcr.io/zerosub/docker-hub-test-app:main', '--region', 'us-central1', '--platform', 'managed']
-      run: |
-      gcr.io/zerosub/docker-hub-test-app:main
+    # - name: Deploy with Docker 
+    #   entrypoint: gcloud
+    #   args: ['run', 'deploy', 'SERVICE_ACCOUNT', '--image', 'gcr.io/zerosub/docker-hub-test-app:main', '--region', 'us-central1', '--platform', 'managed']
+    #   images: gcr.io/zerosub/docker-hub-test-app:main

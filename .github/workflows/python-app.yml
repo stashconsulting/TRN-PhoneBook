@@ -53,7 +53,7 @@ jobs:
         pytest
 
     - name: service account
-       run: |
+      run: |
          echo -n SERVICE_ACCOUNT > credentials.json
          gcloud auth SERVICE_ACCOUNT --key-file credentials.json
 

@@ -41,8 +41,10 @@ jobs:
         images: gcr.io/zerosub/docker-hub-test-app
 
     - name: service account
-      run: |
-         echo -n activate-service-account > credentials.json
+      with:
+        servicename: ${{ secrets.SERVICE_ACCOUNT }}
+        run: |
+         echo -n SERVICE_ACCOUNT > credentials.json
          gcloud auth activate-service-account --key-file credentials.json
          gcloud auth configure-docker -q
          docker push "gcr.io/zerosub/docker-hub-test-app:main"

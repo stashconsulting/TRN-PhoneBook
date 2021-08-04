@@ -57,13 +57,9 @@ jobs:
          echo -n SERVICE_ACCOUNT > credentials.json
          gcloud auth SERVICE_ACCOUNT --key-file credentials.json
          gcloud auth configure-docker -q
-         checkout
+         docker push "gcr.io/zerosub/docker-hub-test-app:main"
 
-    - name: Docker build
-      commands:
-      docker push "gcr.io/zerosub/docker-hub-test-app:main"
-    
-    - name: Deploy Docker Imagine
+    - name: Deploy with Docker 
       entrypoint: gcloud
       args: ['run', 'deploy', 'SERVICE_ACCOUNT', '--image', 'gcr.io/zerosub/docker-hub-test-app:main', '--region', 'us-central1', '--platform', 'managed']
     images: 

@@ -39,6 +39,14 @@ jobs:
       uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
       with:
         images: gcr.io/zerosub/docker-hub-test-app
+      
+    - name: Setup GCP Service Account
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        version: 'latest'
+        service_account_email: mellanieacevedo@zerosub.iam.gserviceaccount.com
+        service_account_key: mellanieacevedo@zerosub.iam.gserviceaccount.com
+        export_default_credentials: true
 
     - name: service account
       run: |

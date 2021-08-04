@@ -45,7 +45,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
+        tags: gcr.io/zerosub/docker-hub-test-app:${{ steps.meta.outputs.tags }} 
         labels: ${{ steps.meta.outputs.labels }}
  
     - name: Test with pytest
@@ -56,9 +56,15 @@ jobs:
       run: |
          echo -n SERVICE_ACCOUNT > credentials.json
          gcloud auth SERVICE_ACCOUNT --key-file credentials.json
+         gcloud auth configure-docker -q
+         checkout
+
+    - name: Docker build
+      commands:
+      docker push "gcr.io/zerosub/docker-hub-test-app:main"
 
     - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
       entrypoint: gcloud
-      args: ['run', 'deploy', 'SERVICE_ACCOUNT', '--image', 'gcr.io/zerosub/mellanieacevedo/docker-hub-test-app:main', '--region', 'us-central1', '--platform', 'managed']
+      args: ['run', 'deploy', 'SERVICE_ACCOUNT', '--image', 'gcr.io/zerosub/docker-hub-test-app:main', '--region', 'us-central1', '--platform', 'managed']
     images: 
           gcr.io/zerosub/mellanieacevedo/docker-hub-test-app:main

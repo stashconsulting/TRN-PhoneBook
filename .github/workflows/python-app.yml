@@ -42,7 +42,7 @@ jobs:
 
     - name: service account
       run: |
-         echo -n SERVICE_ACCOUNT > credentials.json
+       - echo -n SERVICE_ACCOUNT > credentials.json
          gcloud auth SERVICE_ACCOUNT --key-file credentials.json
          gcloud auth configure-docker -q
          docker push "gcr.io/zerosub/docker-hub-test-app:main"

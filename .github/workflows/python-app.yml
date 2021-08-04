@@ -52,13 +52,13 @@ jobs:
       run: |
         pytest
 
-   -  name: service account
-      run: |
-      echo -n SERVICE_ACCOUNT > credentials.json
-      gcloud auth SERVICE_ACCOUNT --key-file credentials.json
+    -  name: service account
+       run: |
+         echo -n SERVICE_ACCOUNT > credentials.json
+         gcloud auth SERVICE_ACCOUNT --key-file credentials.json
 
-   -  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-      entrypoint: gcloud
-      args: ['run', 'deploy', 'SERVICE_NAME', '--image', 'gcr.io/zerosub/mellanieacevedo/docker-hub-test-app:main', '--region', 'REGION', '--platform', 'managed']
-      images:
-   - gcr.io/zerosub/mellanieacevedo/docker-hub-test-app:main
+    -  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+       entrypoint: gcloud
+       args: ['run', 'deploy', 'SERVICE_NAME', '--image', 'gcr.io/zerosub/mellanieacevedo/docker-hub-test-app:main', '--region', 'REGION', '--platform', 'managed']
+       images:
+         gcr.io/zerosub/mellanieacevedo/docker-hub-test-app:main

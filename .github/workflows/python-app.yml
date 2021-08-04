@@ -45,7 +45,6 @@ jobs:
         echo -n ${{ secrets.SERVICE_ACCOUNT }} > credentials.json
         gcloud auth activate-service-account --key-file credentials.json
         gcloud auth configure-docker -q
-        docker push "gcr.io/zerosub/docker-hub-test-app:main"
        
     - name: Build and push Docker image
       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc

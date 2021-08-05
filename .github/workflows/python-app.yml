@@ -65,12 +65,15 @@ jobs:
       run: |
         pytest
 
-    - name: Deploy
-      run: |
-        gcloud run deploy docker-hub-test-app \
-        --region us-central1 \
-        --set-env-vars="80" \
-        --image gcr.io/zerosub/docker-hub-test-app:main \
-        --platform managed \
-        --allow-unauthenticated \
-        --project zerosub
+    - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+      entrypoint: gcloud
+      args:
+        - "beta"
+        - "run"
+        - "deploy"
+        - "docker-hub-test-app"
+        - "--image=gcr.io/zerosub/docker-hub-test-app:main"
+        - "--region=us-central1"
+        - "--set-env-vars=PROJECT_ID=$PROJECT_ID,SERVER_ENV=$_SERVER_ENV,NODE_ENV=production"
+        - "--port=8080"
+        - "--allow-unauthenticated"

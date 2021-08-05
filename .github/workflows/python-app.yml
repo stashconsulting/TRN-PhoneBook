@@ -48,7 +48,11 @@ jobs:
         service_account_email: mellanieacevedo@zerosub.iam.gserviceaccount.com
         service_account_key: ${{ secrets.SERVICE_ACCOUNT }}
         export_default_credentials: true
-       
+  
+    - name: Configure Docker
+      run: |
+        gcloud auth configure-docker
+
     - name: Build and push Docker image
       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
       with:

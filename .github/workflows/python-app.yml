@@ -68,7 +68,7 @@ jobs:
     - name: Deploy
       run: |
         gcloud run deploy docker-hub-test-app \
-        --port 80 \
+        --port 90 \
         --region us-central1 \
         --image gcr.io/zerosub/docker-hub-test-app:main \
         --platform managed \

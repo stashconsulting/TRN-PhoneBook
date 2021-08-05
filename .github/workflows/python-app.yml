@@ -69,7 +69,7 @@ jobs:
       run: |
         gcloud run deploy docker-hub-test-app \
         --region us-central1\
-        --image gcr.io/zerosub/docker-hub-test-app \
+        --image gcr.io/zerosub/docker-hub-test-app:main \
         --platform managed \
         --allow-unauthenticated \
         --project zerosub

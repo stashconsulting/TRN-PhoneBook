@@ -69,7 +69,7 @@ jobs:
       run: |
         gcloud run deploy docker-hub-test-app \
         --region us-central1 \
-        --set-env-vars "80" \
+        --set-env-vars="80" \
         --image gcr.io/zerosub/docker-hub-test-app:main \
         --platform managed \
         --allow-unauthenticated \

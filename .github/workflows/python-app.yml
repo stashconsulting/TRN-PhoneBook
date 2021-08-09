@@ -68,12 +68,12 @@ jobs:
     - name: Deploy
       run: |
         gcloud run deploy docker-hub-test-app \
-        --set-env-vars api_port=80 \
+        --set-env-vars=api_port=80,\
+                        mysql_port=${{ secrets.MYSQL_PORT }},\
+                        mysql_host=${{ secrets.MYSQL_HOST }},\
+                        mysql_user=${{ secrets.MYSQL_USER }},\
+                        mysql_password=${{ secrets.MYSQL_PASSWORD }}
         --port 80 \
-        --set-env-vars =[mysql_port=${{ secrets.MYSQL_PORT }}, \
-                        mysql_host=${{ secrets.MYSQL_HOST }}, \
-                        mysql_user=${{ secrets.MYSQL_USER }}, \
-                        mysql_password=${{ secrets.MYSQL_PASSWORD }}] \
         --region us-central1 \
         --image=gcr.io/zerosub/docker-hub-test-app:main \
         --platform managed \

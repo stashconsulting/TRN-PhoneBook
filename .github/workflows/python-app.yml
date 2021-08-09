@@ -68,10 +68,9 @@ jobs:
     - name: Deploy
       run: |
         gcloud run deploy docker-hub-test-app \
+        --set-env-vars api_port=80 \
         --port 80 \
         --region us-central1 \
-        --set-env-vars="A=$json" \
-        --set-env-vars="C=D" \
         --image=gcr.io/zerosub/docker-hub-test-app:main \
         --platform managed \
         --allow-unauthenticated \

@@ -12,14 +12,27 @@ MYSQLUSER = os.environ.get("mysql_user")
 MYSQLHOST = os.environ.get("mysql_host")
 MYSQLPORT = os.environ.get("mysql_port")
 APIPORT = os.environ.get("api_port")
+SOCKET = os.environ.get('socket', True)
+
+DB_SOCKET_DIR = os.environ.get("db_socket_dir", "/cloudsql")
+cloud_sql_connection_name = "zerosub:us-central1:phonerecords-instancebase"
+
 
 app = Flask(__name__)
 api = Api(app)
+if SOCKET:
+    db_conn_url = (
+        "mysql+pymysql://"
+        f"{MYSQLUSER}:{MYSQLPASSWORD}@/test?unix_socket={DB_SOCKET_DIR}/{cloud_sql_connection_name}"
+    )
+else:
+    db_conn_url = (
+        "mysql+pymysql://"
+        f"{MYSQLUSER}:{MYSQLPASSWORD}@{MYSQLHOST}:{MYSQLPORT}/test"
+    )
 
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "mysql+pymysql://"
-    f"{MYSQLUSER}:{MYSQLPASSWORD}@{MYSQLHOST}:{MYSQLPORT}/test"
-)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = db_conn_url
 engine = SQLAlchemy(app)
 migrate = Migrate(app, engine)
 

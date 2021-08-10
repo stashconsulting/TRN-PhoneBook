@@ -68,7 +68,7 @@ jobs:
     - name: Deploy
       run: |
         gcloud run deploy docker-hub-test-app \
-        --set-env-vars=mysql_user=root,mysql_password=Ivanka0818,socket=/cloudsql,cloud_sql_connection_name=zerosub:us-central1:phonerecords-instancebase \
+        --set-env-vars=mysql_user=root,mysql_password=Ivanka0818,mysql_port=3307,socket=/cloudsql,cloud_sql_connection_name=zerosub:us-central1:phonerecords-instancebase \
         --add-cloudsql-instances=zerosub:us-central1:phonerecords-instancebase \
         --port 80 \
         --region us-central1 \

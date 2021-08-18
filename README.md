@@ -1,31 +1,45 @@
-# TRN-PhoneBook
-training repo
+# Traning of Application Cycle 
 
-## Documentation API project
+## Table of Contents
 
-This project is part of training process for new employees at Fiveops Solutions, in witch we have create and Rest API on python using Flask-restful.
+* Introduction
+* API project
+* What we have achieved
+* Usage
+* Authenticate gcloud
 
-_We will be using the Markdown formating for this assigment on how to document on GitHub._
+## Introduction
 
-## Built With 
-* Python 3.9.5
-* Flask-RESTful 0.3.9
-* Visual Studio Code
+This project is part of the training process of our new employees at Fiveops Solutions, with the purpose of giving a brief summary of the application cycle and get a quick start with Docker, MySQL, Gcloud and others. 
 
-## Getting Started
+## API project
 
-Following we will detail the procces and what we did on the Rest-Api:
+We have created a simple Rest API on python using Flask-restful, this Api emulates a minimal phone registry saving and migrating data from mysql. Using Gcloud we were available to build and deploy a container from the Pipeline.
+
+ ## What we have achieved
  
- ### What we have achieved
- 
-- [x] Receive requests thru HTTP.
-- [x] Register Name, LastName, Number, and Company.
-- [x] Allow users to look up numbers by fully or partial names and last names.
-- [x] Allow users to edit, delite and list.
-- [x] Been available to auto generate an unique id code.
-- [x] Use parcer on the dictionary.
+We created a Rest Api of a phone registry that receive requests through HTTP, where you can register users information, look up fully/partially, edit, delete and storage their information. 
+
+We have migrate database through mysql where all the users information are save automatically. 
+
+We have connected the API with Gcloud Run to build and deploy the app on a container from the Pipeline.
+
+# Authenticate gcloud
+
+Prior to running, ensure you have authenticated your gcloud client by running the following command:
+
+gcloud auth application-default login
+
+# Usage
+
+export mysql_host=****
+export mysql_user=****
+export mysql_password=****
+export mysql_port=****
+export api_port=****
+export socket=""
 
 ### Contact
 
-Mellanie Acevedo - @macvdos - mellanie.acevedo@fiveopssolutions.com
-Pending review by - @sjortiz
+Mellanie Acevedo - @macvdos - stashconsulting
+Pending review by - @sjortiz - stashconsulting

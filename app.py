@@ -1,11 +1,11 @@
+import os
 from flask import Flask
-from flask_restful import Resource, Api, reqparse
-from flask_sqlalchemy import SQLAlchemy
 from flask_script import Manager
+from flask_restful import Resource, Api, reqparse
 from flask_migrate import Migrate, MigrateCommand
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String
 from sqlalchemy.types import Integer, BigInteger
-import os
 
 MYSQLPASSWORD = os.environ.get("mysql_password")
 MYSQLUSER = os.environ.get("mysql_user")
@@ -13,10 +13,10 @@ MYSQLHOST = os.environ.get("mysql_host")
 MYSQLPORT = os.environ.get("mysql_port")
 APIPORT = os.environ.get("api_port")
 SOCKET = os.environ.get('socket', True)
+CLOUDSQLCONNECTION = os.environ.get("proyect_location_instancename")
 
 DB_SOCKET_DIR = os.environ.get("db_socket_dir", "/cloudsql")
-cloud_sql_connection_name = "zerosub:us-central1:phonerecords-instancebase"
-
+cloud_sql_connection_name = CLOUDSQLCONNECTION
 
 app = Flask(__name__)
 api = Api(app)
@@ -33,40 +33,65 @@ else:
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = db_conn_url
+
 engine = SQLAlchemy(app)
 migrate = Migrate(app, engine)
-
 manager = Manager(app)
 manager.add_command("engine", MigrateCommand)
 
 
 def clean_variable(variable_to_clean):
 
-    print(vars(variable_to_clean))
-    variableid = (vars(variable_to_clean))
-    del variableid['_sa_instance_state']
-    return variableid
+    vars(variable_to_clean)
+    variableclean = vars(variable_to_clean)
+    del variableclean['_sa_instance_state']
+    return variableclean
 
 
-def dic_json_serializable(json_serializable_dic):
+def dic_json_serializable(json_serializable_variable):
 
-    dataphonerecords = []
+    data = []
 
-    if isinstance(json_serializable_dic, list):
+    if isinstance(json_serializable_variable, list):
 
-        for variable_to_clean in json_serializable_dic:
-            dataphonerecords.append(clean_variable(variable_to_clean))
+        for variable_to_clean in json_serializable_variable:
+            data.append(clean_variable(variable_to_clean))
 
     else:
-        print(vars(json_serializable_dic))
-        clean_results = (clean_variable(json_serializable_dic))
-        dataphonerecords = clean_results
+        print(vars(json_serializable_variable))
+        clean_results = (clean_variable(json_serializable_variable))
+        data = clean_results
 
-    return dataphonerecords
+    return data
 
 
-class User(engine.Model):
-    __tablename__ = "users"
+def delete_record_by_id(element_id):
+
+    contact.query.filter(contact.user_id == element_id).delete()
+    engine.session.commit()
+    return {'deleted': 'ok'}
+
+
+def create_new_record():
+    args = phone_records_post_parser.parse_args()
+
+    args['full_name'] = f"{args['name']} {args['last_name']}"
+    new_phone_record = contact(
+        name=args["name"],
+        last_name=args["last_name"],
+        full_name=args["full_name"],
+        phone_number=args["phone_number"],
+        company_name=args["company_name"]
+    )
+    engine.session.add(new_phone_record)
+    engine.session.commit()
+    engine.session.refresh(new_phone_record)
+    print(new_phone_record.name)
+    return dic_json_serializable(new_phone_record)
+
+
+class contact(engine.Model):
+    __tablename__ = "contacts"
 
     user_id = Column(Integer(), autoincrement=True, primary_key=True)
     name = Column(String(50), nullable=False)
@@ -94,44 +119,19 @@ class PartialPhoneRecord(Resource):
     def get(self, search_value):
 
         search = "%{}%".format(search_value)
-        datalike = User.query.filter(User.full_name.like(search)).all()
+        datalike = contact.query.filter(contact.full_name.like(search)).all()
         if not datalike:
-            datalike = User.query.filter(User.phone_number.like(search)).all()
+            datalike = contact.query.filter(contact.phone_number.like(search)).all()
         if not datalike:
-            datalike = User.query.filter(User.company_name.like(search)).all()
+            datalike = contact.query.filter(contact.company_name.like(search)).all()
         return dic_json_serializable(datalike)
-
-
-def delete_record_by_id(element_id):
-
-    User.query.filter(User.user_id == element_id).delete()
-    engine.session.commit()
-    return {'deleted': 'ok'}
-
-
-def create_new_record():
-    args = phone_records_post_parser.parse_args()
-
-    args['full_name'] = f"{args['name']} {args['last_name']}"
-    new_phone_record = User(
-        name=args["name"],
-        last_name=args["last_name"],
-        full_name=args["full_name"],
-        phone_number=args["phone_number"],
-        company_name=args["company_name"]
-    )
-    engine.session.add(new_phone_record)
-    engine.session.commit()
-    engine.session.refresh(new_phone_record)
-    print(new_phone_record.name)
-    return dic_json_serializable(new_phone_record)
 
 
 class PhoneRecords(Resource):
 
     def get(self):
 
-        results = engine.session.query(User).all()
+        results = engine.session.query(contact).all()
         return dic_json_serializable(results)
 
     def post(self):
@@ -142,7 +142,7 @@ class PhoneRecord(Resource):
 
     def put(self, element_id):
         args = phone_records_post_parser.parse_args()
-        user = User.query.filter(User.user_id == element_id).first()
+        user = contact.query.filter(contact.user_id == element_id).first()
 
         user.name = args['name']
         user.last_name = args['last_name']

@@ -1,0 +1,6 @@
+export mysql_host="127.0.0.1"
+export mysql_user=root
+export mysql_password="Ivanka0818"
+export mysql_port=3307
+export api_port=9090
+export socket=""

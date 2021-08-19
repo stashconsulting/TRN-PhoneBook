@@ -24,13 +24,13 @@ We have migrate database through mysql where all the users information are save 
 
 We have connected the API with Gcloud Run to build and deploy the app on a container from the Pipeline.
 
-# Authenticate gcloud
+## Authenticate gcloud
 
 Prior to running, ensure you have authenticated your gcloud client by running the following command:
 
 gcloud auth application-default login
 
-# Usage
+## Usage
 
 export mysql_host=****
 export mysql_user=****

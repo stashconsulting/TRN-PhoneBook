@@ -13,10 +13,9 @@ MYSQLHOST = os.environ.get("mysql_host")
 MYSQLPORT = os.environ.get("mysql_port")
 APIPORT = os.environ.get("api_port")
 SOCKET = os.environ.get('socket', True)
-CLOUDSQLCONNECTION = os.environ.get("proyect_location_instancename")
 
 DB_SOCKET_DIR = os.environ.get("db_socket_dir", "/cloudsql")
-cloud_sql_connection_name = CLOUDSQLCONNECTION
+cloud_sql_connection_name = "zerosub:us-central1:phonerecords-instancebase"
 
 app = Flask(__name__)
 api = Api(app)

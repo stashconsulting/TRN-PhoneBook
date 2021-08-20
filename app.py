@@ -41,27 +41,27 @@ manager.add_command("engine", MigrateCommand)
 
 def clean_variable(variable_to_clean):
 
-    vars(variable_to_clean)
-    variableclean = vars(variable_to_clean)
-    del variableclean['_sa_instance_state']
-    return variableclean
+     print(vars(variable_to_clean))
+     variableid = (vars(variable_to_clean))
+     del variableid['_sa_instance_state']
+     return variableid
 
 
-def dic_json_serializable(json_serializable_variable):
+def dic_json_serializable(json_serializable_dic):
 
-    data = []
+    dataphonerecords = []
 
-    if isinstance(json_serializable_variable, list):
+    if isinstance(json_serializable_dic, list):
 
-        for variable_to_clean in json_serializable_variable:
-            data.append(clean_variable(variable_to_clean))
+        for variable_to_clean in json_serializable_dic:
+            dataphonerecords.append(clean_variable(variable_to_clean))
 
     else:
-        print(vars(json_serializable_variable))
-        clean_results = (clean_variable(json_serializable_variable))
-        data = clean_results
+        print(vars(json_serializable_dic))
+        clean_results = (clean_variable(json_serializable_dic))
+        dataphonerecords = clean_results
 
-    return data
+    return dataphonerecords
 
 
 def delete_record_by_id(element_id):
